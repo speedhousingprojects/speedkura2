@@ -49,12 +49,18 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Legal & Privacy */}
+          {/* Column 3: Legal & Careers */}
           <div className="md:col-span-2 space-y-3 font-sans">
             <h4 className="font-display text-base font-bold text-white tracking-wide">
-              Legal & Privacy
+              Company & Legal
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-alabaster/75">
+              <li>
+                <Link href="/careers" className="text-bronze font-semibold hover:text-bronze-light transition-colors flex items-center gap-1.5">
+                  <span>Careers</span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] bg-bronze/20 text-bronze uppercase tracking-wider font-bold">Hiring</span>
+                </Link>
+              </li>
               <li>
                 <Link href="/privacy-policy" className="hover:text-bronze transition-colors">
                   Privacy Policy
@@ -101,27 +107,12 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Legal Disclaimer */}
-        <div className="pt-8 space-y-3 font-sans text-[11px] text-alabaster/55 leading-relaxed">
-          <p>
-            Important Disclaimer: Calculated figures (EMI, tax savings, rentals), layout graphics, and location proximity drive-times shown on this page are indicative models only and do not represent a financial contract, investment advice, or guaranteed yield curves. Home loans are subject to approval policies of underwriting banks. All construction timelines are referenced under TG RERA filings P02200002810.
+        {/* Bottom Strip: Copyright */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs text-alabaster/60 text-center sm:text-left">
+          <p>© {new Date().getFullYear()} Kura Homes. All rights reserved. Codename Hi-Five is a registered project name.</p>
+          <p className="text-[11px] text-alabaster/40">
+            Marketed & Handled by Authorized Project Sales Partner
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 text-alabaster/70">
-            <p>© 2026 Kura Homes. All rights reserved. Masterplanned by Kura Homes.</p>
-            <div className="flex items-center gap-4 text-xs">
-              <Link href="/privacy-policy" className="hover:text-bronze transition-colors">
-                Privacy Policy
-              </Link>
-              <span>·</span>
-              <Link href="/terms" className="hover:text-bronze transition-colors">
-                Terms & Conditions
-              </Link>
-              <span>·</span>
-              <Link href="/disclaimer" className="hover:text-bronze transition-colors">
-                Disclaimer
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </footer>
