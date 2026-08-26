@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import Header from '@/components/nav/Header';
 import Footer from '@/components/nav/Footer';
+import FloatingWhatsApp from '@/components/ui/FloatingWhatsApp';
+import StickyMobileDock from '@/components/ui/StickyMobileDock';
+import Modals from '@/components/ui/Modals';
 import { Briefcase, User, Phone, Layers, Award, CheckCircle2, Send, Loader2, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -17,6 +20,20 @@ export default function CareersPage() {
   const [errors, setErrors] = useState<{ phone?: string; name?: string }>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // Lead Modal State for Header/Footer CTAs
+  const [leadModalOpen, setLeadModalOpen] = useState(false);
+  const [leadModalTitle, setLeadModalTitle] = useState('Book Private Site Visit');
+  const [leadModalSubtitle, setLeadModalSubtitle] = useState(
+    'Experience 5.3 acres of luxury, 40+ amenities & 90% built structures at ORR Exit-5.'
+  );
+  const [leadModalSource, setLeadModalSource] = useState('Careers Page');
+
+  const handleOpenLeadModal = (source: string, title?: string) => {
+    setLeadModalSource(source || 'Careers Page');
+    if (title) setLeadModalTitle(title);
+    setLeadModalOpen(true);
+  };
 
   const validatePhone = (phoneStr: string) => {
     const cleanPhone = phoneStr.replace(/\D/g, '');
@@ -85,7 +102,7 @@ export default function CareersPage() {
 
   return (
     <>
-      <Header onOpenLeadModal={() => {}} />
+      <Header onOpenLeadModal={handleOpenLeadModal} />
 
       <main className="pt-28 sm:pt-32 pb-24 bg-alabaster text-obsidian min-h-screen">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -306,6 +323,22 @@ export default function CareersPage() {
       </main>
 
       <Footer />
+      <StickyMobileDock onOpenLeadModal={handleOpenLeadModal} />
+      <FloatingWhatsApp />
+
+      <Modals
+        leadModalOpen={leadModalOpen}
+        leadModalTitle={leadModalTitle}
+        leadModalSubtitle={leadModalSubtitle}
+        leadModalSource={leadModalSource}
+        onCloseLeadModal={() => setLeadModalOpen(false)}
+        videoModalOpen={false}
+        videoModalSrc=""
+        onCloseVideoModal={() => {}}
+        imageModalOpen={false}
+        imageModalSrc=""
+        onCloseImageModal={() => {}}
+      />
     </>
   );
 }

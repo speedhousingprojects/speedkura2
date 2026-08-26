@@ -1,15 +1,30 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/nav/Header';
 import Footer from '@/components/nav/Footer';
 import FloatingWhatsApp from '@/components/ui/FloatingWhatsApp';
+import StickyMobileDock from '@/components/ui/StickyMobileDock';
+import Modals from '@/components/ui/Modals';
 import { BRAND } from '@/data/content';
 
 export default function TermsPage() {
+  const [leadModalOpen, setLeadModalOpen] = useState(false);
+  const [leadModalTitle, setLeadModalTitle] = useState('Book Private Site Visit');
+  const [leadModalSubtitle, setLeadModalSubtitle] = useState(
+    'Experience 5.3 acres of luxury, 40+ amenities & 90% built structures at ORR Exit-5.'
+  );
+  const [leadModalSource, setLeadModalSource] = useState('Terms Page');
+
+  const handleOpenLeadModal = (source: string, title?: string) => {
+    setLeadModalSource(source || 'Terms Page');
+    if (title) setLeadModalTitle(title);
+    setLeadModalOpen(true);
+  };
+
   return (
     <>
-      <Header onOpenLeadModal={(_src: string) => {}} />
+      <Header onOpenLeadModal={handleOpenLeadModal} />
 
       <main className="pt-32 pb-24 bg-[#F5F3E6] text-[#1B1717] min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,7 +37,7 @@ export default function TermsPage() {
               Terms & Conditions
             </h1>
             <p className="text-xs text-[#1B1717]/60">
-              Last Updated: May 2026 · CODENAME HI-FIVE by Kura Homes
+              Effective Date: May 2026 · CODENAME HI-FIVE by Kura Homes
             </p>
           </div>
 
@@ -33,52 +48,43 @@ export default function TermsPage() {
                 1. Acceptance of Terms
               </h2>
               <p>
-                By accessing, browsing, or using this website for <strong>CODENAME HI-FIVE</strong>, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions. If you do not agree with any part of these terms, you should refrain from using this website.
+                By accessing, browsing, or using this website, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree to these terms, please refrain from using this website.
               </p>
             </section>
 
             <section>
               <h2 className="font-gumani text-xl sm:text-2xl font-bold text-[#3A1C11] mb-3">
-                2. Visual Media & Architectural Renders
+                2. Intellectual Property Rights
               </h2>
               <p>
-                The imagery, 3D architectural renders, floor plan layouts, video walkthroughs, and elevation designs presented on this website are conceptual impressions designed to provide an illustrative representation of CODENAME HI-FIVE. The final layout, materials, landscape features, specifications, and fixtures are governed strictly by the approved HMDA sanction (Permit: <strong>{BRAND.hmda}</strong>), TG RERA filings (Reg: <strong>{BRAND.rera}</strong>), and the formal Agreement of Sale executed between the buyer and Kura Homes.
+                All content displayed on this website—including architectural renders, floor plan blueprints, elevation designs, copy, branding lockups, and videos—is the exclusive intellectual property of Kura Homes or its licensed partners. Unauthorized reproduction, distribution, or modification of any material without express written consent is strictly prohibited.
               </p>
             </section>
 
             <section>
               <h2 className="font-gumani text-xl sm:text-2xl font-bold text-[#3A1C11] mb-3">
-                3. Pricing, Availability & Unit Allocation
+                3. Accuracy of Marketing Renders & Specifications
               </h2>
               <p>
-                All unit prices, floor premiums, square-footage measurements (1,100–1,285 sq.ft for 2 BHK; 1,850–2,200 sq.ft for Duplex), promotional payment terms, and inventory availability are subject to change without prior notice at the sole discretion of Kura Homes. An official unit reservation is confirmed only upon completion of the booking application, receipt of the booking advance, and execution of the Agreement for Sale.
+                Visual representations, 3D architectural walkthroughs, render perspectives, and interior design concepts displayed on this website are artistic impressions meant to illustrate the design intent of CODENAME HI-FIVE. Final structural finishes, fixtures, landscaping details, and amenity specifications are governed exclusively by the TG RERA registered specifications and the executed Sale Agreement.
               </p>
             </section>
 
             <section>
               <h2 className="font-gumani text-xl sm:text-2xl font-bold text-[#3A1C11] mb-3">
-                4. Intellectual Property Rights
+                4. Pricing & Unit Availability
               </h2>
               <p>
-                All brand marks, logos, typography, visual layouts, website copy, architectural renders, project videos, and digital assets associated with CODENAME HI-FIVE and Kura Homes are the exclusive intellectual property of Kura Homes. Any unauthorized reproduction, framing, republication, or distribution without prior written consent is strictly prohibited.
+                All prices mentioned (such as 2 BHK starting from ₹59 Lakhs*) are subject to change without prior notice depending on unit orientation, floor rise, premium location charges (PLC), and availability at the time of booking. Official unit allocation is confirmed only upon payment of the booking advance and execution of formal documentation.
               </p>
             </section>
 
             <section>
               <h2 className="font-gumani text-xl sm:text-2xl font-bold text-[#3A1C11] mb-3">
-                5. Limitation of Liability
+                5. Governing Law & Jurisdiction
               </h2>
               <p>
-                Kura Homes and its affiliates make reasonable efforts to maintain accurate and up-to-date information on this website. However, we do not warrant that the website will be uninterrupted or error-free. In no event shall Kura Homes be liable for any direct, indirect, incidental, or consequential damages arising from the use of this website.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="font-gumani text-xl sm:text-2xl font-bold text-[#3A1C11] mb-3">
-                6. Governing Law & Jurisdiction
-              </h2>
-              <p>
-                These Terms & Conditions and any disputes or claims arising out of or related to this website or real estate transactions for CODENAME HI-FIVE shall be governed by and construed in accordance with the laws of India, under the exclusive jurisdiction of the competent courts in Hyderabad, Telangana.
+                These Terms and Conditions shall be governed by and construed in accordance with the laws of India. Any legal disputes arising out of or in connection with the use of this website shall be subject to the exclusive jurisdiction of the competent courts in Hyderabad, Telangana.
               </p>
             </section>
           </div>
@@ -86,7 +92,22 @@ export default function TermsPage() {
       </main>
 
       <Footer />
+      <StickyMobileDock onOpenLeadModal={handleOpenLeadModal} />
       <FloatingWhatsApp />
+
+      <Modals
+        leadModalOpen={leadModalOpen}
+        leadModalTitle={leadModalTitle}
+        leadModalSubtitle={leadModalSubtitle}
+        leadModalSource={leadModalSource}
+        onCloseLeadModal={() => setLeadModalOpen(false)}
+        videoModalOpen={false}
+        videoModalSrc=""
+        onCloseVideoModal={() => {}}
+        imageModalOpen={false}
+        imageModalSrc=""
+        onCloseImageModal={() => {}}
+      />
     </>
   );
 }

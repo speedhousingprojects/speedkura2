@@ -1,15 +1,30 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/nav/Header';
 import Footer from '@/components/nav/Footer';
 import FloatingWhatsApp from '@/components/ui/FloatingWhatsApp';
+import StickyMobileDock from '@/components/ui/StickyMobileDock';
+import Modals from '@/components/ui/Modals';
 import { BRAND } from '@/data/content';
 
 export default function PrivacyPolicyPage() {
+  const [leadModalOpen, setLeadModalOpen] = useState(false);
+  const [leadModalTitle, setLeadModalTitle] = useState('Book Private Site Visit');
+  const [leadModalSubtitle, setLeadModalSubtitle] = useState(
+    'Experience 5.3 acres of luxury, 40+ amenities & 90% built structures at ORR Exit-5.'
+  );
+  const [leadModalSource, setLeadModalSource] = useState('Privacy Policy Page');
+
+  const handleOpenLeadModal = (source: string, title?: string) => {
+    setLeadModalSource(source || 'Privacy Policy Page');
+    if (title) setLeadModalTitle(title);
+    setLeadModalOpen(true);
+  };
+
   return (
     <>
-      <Header onOpenLeadModal={(_src: string) => {}} />
+      <Header onOpenLeadModal={handleOpenLeadModal} />
 
       <main className="pt-32 pb-24 bg-[#F5F3E6] text-[#1B1717] min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,7 +108,22 @@ export default function PrivacyPolicyPage() {
       </main>
 
       <Footer />
+      <StickyMobileDock onOpenLeadModal={handleOpenLeadModal} />
       <FloatingWhatsApp />
+
+      <Modals
+        leadModalOpen={leadModalOpen}
+        leadModalTitle={leadModalTitle}
+        leadModalSubtitle={leadModalSubtitle}
+        leadModalSource={leadModalSource}
+        onCloseLeadModal={() => setLeadModalOpen(false)}
+        videoModalOpen={false}
+        videoModalSrc=""
+        onCloseVideoModal={() => {}}
+        imageModalOpen={false}
+        imageModalSrc=""
+        onCloseImageModal={() => {}}
+      />
     </>
   );
 }
