@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const DEFAULT_GOOGLE_SHEET_URL =
-  'https://script.google.com/macros/s/AKfycbwK2y5dkBL0y1LNb0v9le8mM0AcXEGsLLvosHh42z8zmQN4ifSSPJmtsR3BrElDY8kr/exec';
+  'https://script.google.com/macros/s/AKfycbxvYY4X40FrHqe4bN4qU-1ryD82F_K_3tZECrlfVxtLyxa0oh8EVUyiH8ju-Q7eU1S3/exec';
 
 const DEFAULT_PRIVYR_URL =
   'https://www.privyr.com/api/v1/incoming-leads/0vZfjMQw/5qFshIIw';
