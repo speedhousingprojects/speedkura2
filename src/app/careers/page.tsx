@@ -59,6 +59,10 @@ export default function CareersPage() {
         body: JSON.stringify({
           name: formData.name.trim(),
           phone: formData.phone.trim(),
+          role: formData.role,
+          experience: formData.experience,
+          type: 'career',
+          targetSheet: 'Sheet2',
           requirement: `Role: ${formData.role} | Exp: ${formData.experience}`,
           source: `Career Application - ${formData.role}`,
           date: new Date().toLocaleDateString('en-IN'),

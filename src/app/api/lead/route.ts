@@ -1,49 +1,87 @@
 import { NextResponse } from 'next/server';
 
-const DEFAULT_WEBHOOK_URL =
-  'https://script.google.com/macros/s/AKfycbwK2y5dkBL0y1LNb0v9le8mM0AcXEGsLLvosHh42z8zmQN4ifSSPJmtsR3BrElDY8kr/exec';
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, requirement, date, source, timestamp } = body;
+    const { name, phone, requirement, date, source, role, experience, type, timestamp } = body;
+
+    const roleClean = role ? String(role).trim() : '';
+    const isCareer = type === 'career' || String(source || '').toLowerCase().includes('career');
+
+    // 3 Sheets Routing Classification:
+    // Sheet1 -> Project Leads
+    // Sheet2 -> Sales Executive Applications
+    // Sheet3 -> Channel Partner Applications
+    let targetSheet = 'Sheet1';
+    if (isCareer) {
+      if (roleClean.toLowerCase().includes('partner') || roleClean.toLowerCase().includes('channel')) {
+        targetSheet = 'Sheet3';
+      } else {
+        targetSheet = 'Sheet2';
+      }
+    }
 
     const payload = {
       name: name ? String(name).trim() : '',
       phone: phone ? String(phone).trim() : '',
       requirement: requirement ? String(requirement).trim() : '',
+      role: roleClean,
+      experience: experience ? String(experience).trim() : '',
       source: source ? String(source).trim() : 'Website Enquiry',
+      type: isCareer ? 'career' : 'project',
+      targetSheet,
       date: date ? String(date).trim() : '',
       timestamp: timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
     };
 
     console.log('[LEAD CAPTURED]:', payload);
 
-    // Forward to Google Sheets Webhook (Environment Variable OR Built-in Fallback)
+    // 1. Forward to Google Sheets Webhook (Environment Variable strictly)
     const googleSheetWebhook =
-      process.env.GOOGLE_SHEET_WEBHOOK_URL ||
-      process.env.GOOGLE_APPS_SCRIPT_URL ||
-      DEFAULT_WEBHOOK_URL;
+      process.env.GOOGLE_SHEET_WEBHOOK_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
 
     if (googleSheetWebhook) {
-      try {
-        const sheetRes = await fetch(googleSheetWebhook, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          redirect: 'follow',
-        });
+      fetch(googleSheetWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        redirect: 'follow',
+      })
+        .then((res) => res.text())
+        .then((resText) => console.log('[GOOGLE SHEETS SYNC SUCCESS]:', resText))
+        .catch((err) => console.error('[GOOGLE SHEETS SYNC ERROR]:', err));
+    } else {
+      console.warn('[LEAD API]: GOOGLE_SHEET_WEBHOOK_URL environment variable is missing.');
+    }
 
-        const resText = await sheetRes.text();
-        console.log(`[GOOGLE SHEETS STATUS]: HTTP ${sheetRes.status} | Response:`, resText);
-      } catch (sheetError) {
-        console.error('[GOOGLE SHEETS SYNC ERROR]:', sheetError);
-      }
+    // 2. Forward to Privyr CRM Webhook (Environment Variable strictly)
+    const privyrWebhook = process.env.PRIVYR_WEBHOOK_URL;
+
+    if (privyrWebhook) {
+      const privyrPayload = {
+        name: payload.name,
+        phone: payload.phone,
+        notes: payload.role
+          ? `Role: ${payload.role} | Exp: ${payload.experience}`
+          : payload.requirement,
+        source: payload.source,
+      };
+
+      fetch(privyrWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(privyrPayload),
+      })
+        .then((res) => res.json())
+        .then((resJson) => console.log('[PRIVYR CRM SYNC SUCCESS]:', resJson))
+        .catch((err) => console.error('[PRIVYR CRM SYNC ERROR]:', err));
+    } else {
+      console.warn('[LEAD API]: PRIVYR_WEBHOOK_URL environment variable is missing.');
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Thank you! Our team will connect with you shortly with complete details.',
+      message: 'Thank you! Our team will connect with you shortly.',
     });
   } catch (error) {
     console.error('[LEAD SUBMISSION ERROR]:', error);
