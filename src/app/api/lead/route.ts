@@ -9,10 +9,16 @@ const DEFAULT_PRIVYR_URL =
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, requirement, date, source, role, experience, type, timestamp } = body;
+    const { name, phone, requirement, date, source, role, experience, type } = body;
 
     const roleClean = role ? String(role).trim() : '';
     const isCareer = type === 'career' || String(source || '').toLowerCase().includes('career');
+
+    // Always generate clean Indian Standard Time (IST) timestamp: e.g. "26/8/2026, 6:15:55 pm"
+    const istTimestamp = new Date().toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour12: true,
+    });
 
     // 3 Sheets Routing Classification:
     // Sheet1 -> Project Leads
@@ -37,7 +43,7 @@ export async function POST(request: Request) {
       type: isCareer ? 'career' : 'project',
       targetSheet,
       date: date ? String(date).trim() : '',
-      timestamp: timestamp || new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      timestamp: istTimestamp,
     };
 
     console.log('[LEAD CAPTURED]:', payload);
