@@ -42,25 +42,29 @@ export async function POST(request: Request) {
 
     console.log('[LEAD CAPTURED]:', payload);
 
-    // 1. Forward to Google Sheets Webhook (Environment Variable OR Fallback)
+    const dispatches: Promise<any>[] = [];
+
+    // 1. Forward to Google Sheets Webhook
     const googleSheetWebhook =
       process.env.GOOGLE_SHEET_WEBHOOK_URL ||
       process.env.GOOGLE_APPS_SCRIPT_URL ||
       DEFAULT_GOOGLE_SHEET_URL;
 
     if (googleSheetWebhook) {
-      fetch(googleSheetWebhook, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        redirect: 'follow',
-      })
-        .then((res) => res.text())
-        .then((resText) => console.log('[GOOGLE SHEETS SYNC SUCCESS]:', resText))
-        .catch((err) => console.error('[GOOGLE SHEETS SYNC ERROR]:', err));
+      dispatches.push(
+        fetch(googleSheetWebhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          redirect: 'follow',
+        })
+          .then((res) => res.text())
+          .then((resText) => console.log('[GOOGLE SHEETS SYNC SUCCESS]:', resText))
+          .catch((err) => console.error('[GOOGLE SHEETS SYNC ERROR]:', err))
+      );
     }
 
-    // 2. Forward to Privyr CRM Webhook (Environment Variable OR Fallback)
+    // 2. Forward to Privyr CRM Webhook
     const privyrWebhook =
       process.env.PRIVYR_WEBHOOK_URL ||
       DEFAULT_PRIVYR_URL;
@@ -75,15 +79,20 @@ export async function POST(request: Request) {
         source: payload.source,
       };
 
-      fetch(privyrWebhook, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(privyrPayload),
-      })
-        .then((res) => res.json())
-        .then((resJson) => console.log('[PRIVYR CRM SYNC SUCCESS]:', resJson))
-        .catch((err) => console.error('[PRIVYR CRM SYNC ERROR]:', err));
+      dispatches.push(
+        fetch(privyrWebhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(privyrPayload),
+        })
+          .then((res) => res.json())
+          .then((resJson) => console.log('[PRIVYR CRM SYNC SUCCESS]:', resJson))
+          .catch((err) => console.error('[PRIVYR CRM SYNC ERROR]:', err))
+      );
     }
+
+    // CRITICAL FOR VERCEL SERVERLESS: Wait for webhooks to finish BEFORE returning response!
+    await Promise.allSettled(dispatches);
 
     return NextResponse.json({
       success: true,
