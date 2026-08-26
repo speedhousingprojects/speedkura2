@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
 
+const DEFAULT_GOOGLE_SHEET_URL =
+  'https://script.google.com/macros/s/AKfycbwK2y5dkBL0y1LNb0v9le8mM0AcXEGsLLvosHh42z8zmQN4ifSSPJmtsR3BrElDY8kr/exec';
+
+const DEFAULT_PRIVYR_URL =
+  'https://www.privyr.com/api/v1/incoming-leads/0vZfjMQw/5qFshIIw';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -36,9 +42,11 @@ export async function POST(request: Request) {
 
     console.log('[LEAD CAPTURED]:', payload);
 
-    // 1. Forward to Google Sheets Webhook (Environment Variable strictly)
+    // 1. Forward to Google Sheets Webhook (Environment Variable OR Fallback)
     const googleSheetWebhook =
-      process.env.GOOGLE_SHEET_WEBHOOK_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
+      process.env.GOOGLE_SHEET_WEBHOOK_URL ||
+      process.env.GOOGLE_APPS_SCRIPT_URL ||
+      DEFAULT_GOOGLE_SHEET_URL;
 
     if (googleSheetWebhook) {
       fetch(googleSheetWebhook, {
@@ -50,12 +58,12 @@ export async function POST(request: Request) {
         .then((res) => res.text())
         .then((resText) => console.log('[GOOGLE SHEETS SYNC SUCCESS]:', resText))
         .catch((err) => console.error('[GOOGLE SHEETS SYNC ERROR]:', err));
-    } else {
-      console.warn('[LEAD API]: GOOGLE_SHEET_WEBHOOK_URL environment variable is missing.');
     }
 
-    // 2. Forward to Privyr CRM Webhook (Environment Variable strictly)
-    const privyrWebhook = process.env.PRIVYR_WEBHOOK_URL;
+    // 2. Forward to Privyr CRM Webhook (Environment Variable OR Fallback)
+    const privyrWebhook =
+      process.env.PRIVYR_WEBHOOK_URL ||
+      DEFAULT_PRIVYR_URL;
 
     if (privyrWebhook) {
       const privyrPayload = {
@@ -75,8 +83,6 @@ export async function POST(request: Request) {
         .then((res) => res.json())
         .then((resJson) => console.log('[PRIVYR CRM SYNC SUCCESS]:', resJson))
         .catch((err) => console.error('[PRIVYR CRM SYNC ERROR]:', err));
-    } else {
-      console.warn('[LEAD API]: PRIVYR_WEBHOOK_URL environment variable is missing.');
     }
 
     return NextResponse.json({
