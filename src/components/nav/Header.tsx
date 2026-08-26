@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Phone, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,6 +26,16 @@ export default function Header({ onOpenLeadModal }: HeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navLinks = [
+    { label: 'Overview', href: '/#overview' },
+    { label: 'Homes & Pricing', href: '/#pricing' },
+    { label: 'Calculators', href: '/#calculators' },
+    { label: 'Lifestyle', href: '/#amenities' },
+    { label: 'Location', href: '/#location' },
+    { label: 'Progress', href: '/#progress' },
+    { label: 'Contact', href: '/#contact' },
+  ];
+
   return (
     <>
       <header
@@ -35,8 +46,8 @@ export default function Header({ onOpenLeadModal }: HeaderProps) {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Left Brand Lockup (Logos made significantly larger & more prominent) */}
-          <a href="#hero" className="flex items-center gap-3 sm:gap-4 group">
+          {/* Left Brand Lockup */}
+          <Link href="/" className="flex items-center gap-3 sm:gap-4 group">
             <Image
               src="/logos/kura homes logo.png"
               alt="Kura Homes (55 Years of Trust)"
@@ -58,19 +69,11 @@ export default function Header({ onOpenLeadModal }: HeaderProps) {
               }`}
               priority
             />
-          </a>
+          </Link>
 
           {/* Center Nav Links */}
           <nav className="hidden lg:flex items-center gap-7 xl:gap-8">
-            {[
-              { label: 'Overview', href: '#overview' },
-              { label: 'Homes & Pricing', href: '#pricing' },
-              { label: 'Calculators', href: '#calculators' },
-              { label: 'Lifestyle', href: '#amenities' },
-              { label: 'Location', href: '#location' },
-              { label: 'Progress', href: '#progress' },
-              { label: 'Contact', href: '#contact' },
-            ].map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
@@ -126,15 +129,7 @@ export default function Header({ onOpenLeadModal }: HeaderProps) {
             className="fixed top-[76px] left-0 right-0 z-40 bg-obsidian text-alabaster border-b border-white/15 shadow-2xl lg:hidden overflow-hidden"
           >
             <div className="px-6 py-6 space-y-4 font-sans text-center">
-              {[
-                { label: 'Overview', href: '#overview' },
-                { label: 'Homes & Pricing', href: '#pricing' },
-                { label: 'Calculators', href: '#calculators' },
-                { label: 'Lifestyle', href: '#amenities' },
-                { label: 'Location', href: '#location' },
-                { label: 'Progress', href: '#progress' },
-                { label: 'Contact', href: '#contact' },
-              ].map((link) => (
+              {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}

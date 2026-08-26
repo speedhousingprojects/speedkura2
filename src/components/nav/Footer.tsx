@@ -2,13 +2,14 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { MapPin, ShieldCheck, FileCheck } from 'lucide-react';
 
 export default function Footer() {
   return (
     <footer className="bg-obsidian text-alabaster border-t border-white/10 pt-16 pb-24 md:pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 pb-12 border-b border-white/10">
           {/* Column 1: Brand Statement */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-4">
@@ -34,22 +35,46 @@ export default function Footer() {
           </div>
 
           {/* Column 2: Quick Links */}
-          <div className="md:col-span-3 space-y-3 font-sans">
+          <div className="md:col-span-2 space-y-3 font-sans">
             <h4 className="font-display text-base font-bold text-white tracking-wide">
               Quick Navigation
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-alabaster/75">
-              <li><a href="#hero" className="hover:text-bronze transition-colors">Overview</a></li>
-              <li><a href="#pricing" className="hover:text-bronze transition-colors">Homes & Floor Plans</a></li>
-              <li><a href="#calculators" className="hover:text-bronze transition-colors">Financial Studio & EMI</a></li>
-              <li><a href="#amenities" className="hover:text-bronze transition-colors">25K Sq.Ft Clubhouse</a></li>
-              <li><a href="#location" className="hover:text-bronze transition-colors">Location & Transit</a></li>
-              <li><a href="#progress" className="hover:text-bronze transition-colors">Construction Progress</a></li>
+              <li><a href="/#hero" className="hover:text-bronze transition-colors">Overview</a></li>
+              <li><a href="/#pricing" className="hover:text-bronze transition-colors">Homes & Floor Plans</a></li>
+              <li><a href="/#calculators" className="hover:text-bronze transition-colors">Financial Studio & EMI</a></li>
+              <li><a href="/#amenities" className="hover:text-bronze transition-colors">25K Sq.Ft Clubhouse</a></li>
+              <li><a href="/#location" className="hover:text-bronze transition-colors">Location & Transit</a></li>
+              <li><a href="/#progress" className="hover:text-bronze transition-colors">Construction Progress</a></li>
             </ul>
           </div>
 
-          {/* Column 3: Approvals & Address */}
-          <div className="md:col-span-4 space-y-3 font-sans">
+          {/* Column 3: Legal & Privacy */}
+          <div className="md:col-span-2 space-y-3 font-sans">
+            <h4 className="font-display text-base font-bold text-white tracking-wide">
+              Legal & Privacy
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm text-alabaster/75">
+              <li>
+                <Link href="/privacy-policy" className="hover:text-bronze transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-bronze transition-colors">
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link href="/disclaimer" className="hover:text-bronze transition-colors">
+                  Disclaimer
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Approvals & Address */}
+          <div className="md:col-span-3 space-y-3 font-sans">
             <h4 className="font-display text-base font-bold text-white tracking-wide">
               Compliance & Address
             </h4>
@@ -81,9 +106,22 @@ export default function Footer() {
           <p>
             Important Disclaimer: Calculated figures (EMI, tax savings, rentals), layout graphics, and location proximity drive-times shown on this page are indicative models only and do not represent a financial contract, investment advice, or guaranteed yield curves. Home loans are subject to approval policies of underwriting banks. All construction timelines are referenced under TG RERA filings P02200002810.
           </p>
-          <p className="text-alabaster/70">
-            © 2026 Kura Homes. All rights reserved. Masterplanned by Kura Homes.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 text-alabaster/70">
+            <p>© 2026 Kura Homes. All rights reserved. Masterplanned by Kura Homes.</p>
+            <div className="flex items-center gap-4 text-xs">
+              <Link href="/privacy-policy" className="hover:text-bronze transition-colors">
+                Privacy Policy
+              </Link>
+              <span>·</span>
+              <Link href="/terms" className="hover:text-bronze transition-colors">
+                Terms & Conditions
+              </Link>
+              <span>·</span>
+              <Link href="/disclaimer" className="hover:text-bronze transition-colors">
+                Disclaimer
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

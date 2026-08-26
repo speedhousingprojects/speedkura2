@@ -177,7 +177,7 @@ export default function ConversionHubSection() {
                     >
                       <option value="">Preferred Layout (Optional)</option>
                       <option value="2 BHK">Smart 2 BHK Apartment</option>
-                      <option value="Duplex">Bespoke Duplex Suite</option>
+                      <option value="Duplex">Duplex Homes</option>
                       <option value="Both">Interested in Both</option>
                     </select>
                   </div>

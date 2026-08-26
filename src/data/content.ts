@@ -149,3 +149,48 @@ export const PERSPECTIVES = [
     videoSrc: '/videos/Design.mp4',
   },
 ];
+
+// Compatibility aliases
+export const BRAND = {
+  name: PROJECT_INFO.name,
+  developer: PROJECT_INFO.developer,
+  tagline: PROJECT_INFO.tagline,
+  rera: PROJECT_INFO.reraNumber,
+  hmda: PROJECT_INFO.hmdaNumber,
+  phone: PROJECT_INFO.phoneDisplay,
+  phoneAlt: '800 800 8972',
+  whatsapp: '918008008946',
+  email: 'senareddy.kura@speedhousing.in',
+  address: PROJECT_INFO.location,
+  mapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3803.968607142475!2d78.3752!3d17.5568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sBowrampet!5e0!3m2!1sen!2sin!4v1700000000000',
+};
+
+export const FOOTER_DATA = {
+  callout: '500+ homes booked at CODENAME HI-FIVE. It\'s your turn now.',
+  address: PROJECT_INFO.location,
+  hmda: PROJECT_INFO.hmdaNumber,
+  rera: PROJECT_INFO.reraNumber,
+};
+
+export const ASSETS = {
+  logos: {
+    kuraHomes: '/logos/kura-homes-logo-2.png',
+    hiFive: '/logos/hifive-logo.jpeg',
+  },
+  videos: {
+    hero: '/videos/hero-video.mp4',
+    construction: '/videos/sanarelli_progress_web.mp4',
+  },
+  images: {
+    heroBg: '/images/Front view.webp',
+  },
+};
+
+export const NAV_LINKS = [
+  { label: 'Overview', href: '#hero' },
+  { label: 'Homes & Plans', href: '#pricing' },
+  { label: 'Calculators', href: '#calculators' },
+  { label: 'Amenities', href: '#amenities' },
+  { label: 'Location', href: '#location' },
+  { label: 'Progress', href: '#progress' },
+];

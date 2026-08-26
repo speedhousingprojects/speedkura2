@@ -116,7 +116,7 @@ export default function PricingSection({ onOpenLeadModal }: PricingSectionProps)
             </div>
           </motion.div>
 
-          {/* Card 2: Bespoke Duplex Suites */}
+          {/* Card 2: Duplex Homess */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -135,7 +135,7 @@ export default function PricingSection({ onOpenLeadModal }: PricingSectionProps)
 
               <div>
                 <h3 className="font-display text-xl sm:text-2xl font-bold text-obsidian">
-                  Bespoke Duplex Suites
+                  Duplex Homess
                 </h3>
                 <div className="flex items-baseline gap-2 mt-1">
                   <span className="font-display text-2xl sm:text-3xl font-bold text-bronze">
@@ -151,7 +151,7 @@ export default function PricingSection({ onOpenLeadModal }: PricingSectionProps)
               <ul className="space-y-2 pt-2 border-t border-zinc-border/60 font-sans text-xs sm:text-sm text-obsidian/80">
                 <li className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>2,200 Sq.Ft bespoke duplex layouts</span>
+                  <span>2,200 Sq.Ft Duplex Homes layouts</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />

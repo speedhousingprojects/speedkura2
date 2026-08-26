@@ -31,7 +31,7 @@ const GALLERIES = [
       { src: '/images/Dining area.webp', title: 'Open-Plan Dining & Entertaining Zone' },
       { src: '/images/Kitchen.webp', title: 'Modular Kitchen with Premium Fittings' },
       { src: '/images/Master bedroom.webp', title: 'Master Bedroom Penthouse Suite' },
-      { src: '/images/Bedroom detail.webp', title: 'Bespoke Fitting & Storage Details' },
+      { src: '/images/Bedroom detail.webp', title: 'Premium Fitting & Storage Details' },
       { src: '/images/bedroom 1.webp', title: 'Smart 2nd Bedroom Plan' },
     ],
   },
