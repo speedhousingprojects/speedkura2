@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+const DEFAULT_WEBHOOK_URL =
+  'https://script.google.com/macros/s/AKfycbwK2y5dkBL0y1LNb0v9le8mM0AcXEGsLLvosHh42z8zmQN4ifSSPJmtsR3BrElDY8kr/exec';
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -16,8 +19,11 @@ export async function POST(request: Request) {
 
     console.log('[LEAD CAPTURED]:', payload);
 
-    // Forward to Google Sheets Webhook if configured in environment variables
-    const googleSheetWebhook = process.env.GOOGLE_SHEET_WEBHOOK_URL || process.env.GOOGLE_APPS_SCRIPT_URL;
+    // Forward to Google Sheets Webhook (Environment Variable OR Built-in Fallback)
+    const googleSheetWebhook =
+      process.env.GOOGLE_SHEET_WEBHOOK_URL ||
+      process.env.GOOGLE_APPS_SCRIPT_URL ||
+      DEFAULT_WEBHOOK_URL;
 
     if (googleSheetWebhook) {
       try {
