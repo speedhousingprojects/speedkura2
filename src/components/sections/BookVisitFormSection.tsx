@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Phone, MessageSquare, CheckCircle2, ShieldCheck, CalendarCheck } from 'lucide-react';
 import { PROJECT_INFO } from '@/data/content';
+import { trackConversion } from '@/lib/gtag';
 
 export default function BookVisitFormSection() {
   const [name, setName] = useState('');
@@ -33,6 +34,7 @@ export default function BookVisitFormSection() {
       // Fallback
     }
 
+    trackConversion();
     setLoading(false);
     setSubmitted(true);
   };

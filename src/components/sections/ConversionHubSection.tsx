@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Phone, CheckCircle2, Sparkles, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { trackConversion } from '@/lib/gtag';
 
 export default function ConversionHubSection() {
   const [name, setName] = useState('');
@@ -31,6 +32,7 @@ export default function ConversionHubSection() {
       // Fallback
     }
 
+    trackConversion();
     setLoading(false);
     setSubmitted(true);
   };

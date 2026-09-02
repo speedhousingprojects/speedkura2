@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { X, CheckCircle2, Send } from 'lucide-react';
+import { trackConversion } from '@/lib/gtag';
 
 interface ModalsProps {
   leadModalOpen: boolean;
@@ -56,6 +57,7 @@ export default function Modals({
     } catch {
       // Fallback
     }
+    trackConversion();
     setIsSubmitting(false);
     setModalSubmitted(true);
     setTimeout(() => {

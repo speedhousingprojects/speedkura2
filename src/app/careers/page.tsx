@@ -8,6 +8,7 @@ import StickyMobileDock from '@/components/ui/StickyMobileDock';
 import Modals from '@/components/ui/Modals';
 import { Briefcase, User, Phone, Layers, Award, CheckCircle2, Send, Loader2, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { trackConversion } from '@/lib/gtag';
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
@@ -88,6 +89,7 @@ export default function CareersPage() {
       });
 
       if (res.ok) {
+        trackConversion();
         setSubmitted(true);
       } else {
         alert('Application submission failed. Please try calling us at 800 800 8946.');

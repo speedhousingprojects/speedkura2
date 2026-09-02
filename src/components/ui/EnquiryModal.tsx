@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, ShieldCheck, PhoneCall, CheckCircle2 } from 'lucide-react';
+import { trackConversion } from '@/lib/gtag';
 
 interface EnquiryModalProps {
   isOpen: boolean;
@@ -58,6 +59,7 @@ export default function EnquiryModal({
       // Graceful fallback
     }
 
+    trackConversion();
     setLoading(false);
     setSubmitted(true);
     setTimeout(() => {
