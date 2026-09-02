@@ -57,7 +57,7 @@ export default function RootLayout({
       <head>
         {/* Google Tag (gtag.js) */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18408015022"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17602634500"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -66,7 +66,7 @@ export default function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'AW-18408015022');
+            gtag('config', 'AW-17602634500');
           `}
         </Script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
