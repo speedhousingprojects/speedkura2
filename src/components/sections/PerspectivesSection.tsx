@@ -14,10 +14,10 @@ const PERSPECTIVES = [
     title: 'Investment Appreciation Value',
     tag: 'Financial Growth',
     icon: TrendingUp,
-    desc: 'Comparing entry price of ₹4,999/sq.ft with older corridors (₹9K-10K/sq.ft) and historical growth curves.',
+    desc: 'Comparing attractive entry pricing at ORR Exit-5 with mature corridors and high historical growth curves.',
     image: '/images/thumb_investment.webp',
     video: '/videos/investment.mp4',
-    highlight: '₹4,999/sft vs ₹10K/sft in older corridors',
+    highlight: 'High capital appreciation corridor near ORR',
   },
   {
     title: 'Vaastu & Spaces Philosophy',

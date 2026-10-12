@@ -9,8 +9,8 @@ interface AffordabilityStudioSectionProps {
 }
 
 export default function AffordabilityStudioSection({ onOpenLeadModal }: AffordabilityStudioSectionProps) {
-  const [propertyPrice, setPropertyPrice] = useState(5900000);
-  const [loanAmount, setLoanAmount] = useState(4720000);
+  const [propertyPrice, setPropertyPrice] = useState(5500000);
+  const [loanAmount, setLoanAmount] = useState(4400000);
   const [tenureYears, setTenureYears] = useState(20);
   const [interestRate, setInterestRate] = useState(7.95);
 
@@ -79,17 +79,17 @@ export default function AffordabilityStudioSection({ onOpenLeadModal }: Affordab
               <input
                 type="range"
                 className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-[#BFA181]"
-                min={5900000}
+                min={5500000}
                 max={15000000}
                 step={100000}
                 value={propertyPrice}
                 style={{
-                  background: `linear-gradient(to right, #BFA181 0%, #BFA181 ${((propertyPrice - 5900000) / (15000000 - 5900000)) * 100}%, #DFE3E8 ${((propertyPrice - 5900000) / (15000000 - 5900000)) * 100}%, #DFE3E8 100%)`,
+                  background: `linear-gradient(to right, #BFA181 0%, #BFA181 ${((propertyPrice - 5500000) / (15000000 - 5500000)) * 100}%, #DFE3E8 ${((propertyPrice - 5500000) / (15000000 - 5500000)) * 100}%, #DFE3E8 100%)`,
                 }}
                 onChange={(e) => handlePropertyChange(Number(e.target.value))}
               />
               <div className="flex justify-between font-sans text-[10px] text-charcoal-mute/60">
-                <span>₹59 Lakhs</span>
+                <span>₹55 Lakhs</span>
                 <span>₹1.50 Crore</span>
               </div>
             </div>

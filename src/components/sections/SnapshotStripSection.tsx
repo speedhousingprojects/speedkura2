@@ -19,8 +19,8 @@ export default function SnapshotStripSection() {
           </div>
           <div className="snapshot-card">
             <i className="fa-solid fa-indian-rupee-sign text-caramel"></i>
-            <span className="val font-gumani font-bold">₹4,999/sft</span>
-            <span className="lbl font-figtree font-medium">Starting price</span>
+            <span className="val font-gumani font-bold">₹55 Lakhs*</span>
+            <span className="lbl font-figtree font-medium">Starting Price</span>
           </div>
           <div className="snapshot-card">
             <i className="fa-solid fa-up-down-left-right text-caramel"></i>

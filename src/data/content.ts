@@ -37,7 +37,6 @@ export const PROJECT_INFO = {
   developerWebsite: 'https://kurahomes.in',
   hmdaNumber: 'G1/DM/2237/BP/2021',
   startingPrice: '₹55 Lakhs',
-  pricePerSft: '₹4,999/sft',
   totalAcres: '5.3 Acres',
   completionStatus: '90% Constructed',
 };
@@ -45,7 +44,7 @@ export const PROJECT_INFO = {
 export const QUICK_STATS = [
   { value: '5.3 Acres', label: 'Gated Township' },
   { value: '2 BHK & Duplex', label: 'Smart Layouts' },
-  { value: '₹4,999/sft', label: 'Starting Price' },
+  { value: '₹55 Lakhs*', label: 'Starting Price' },
   { value: '1,100 - 2,200', label: 'Sq.Ft Carpet Area' },
   { value: '1 Min', label: 'To ORR Exit 5' },
   { value: '90% Built', label: 'Possession Soon' },
@@ -142,7 +141,7 @@ export const PERSPECTIVES = [
   },
   {
     title: 'Investment Appreciation Value',
-    desc: 'Comparing entry pricing of ORR 5 at ₹4,999/sq.ft with older corridors of ORR 3 (₹9K-10K/sq.ft) and historical growth curves.',
+    desc: 'Comparing attractive entry pricing at ORR Exit-5 with mature corridors and high historical growth curves.',
     videoSrc: '/videos/investment.mp4',
   },
   {

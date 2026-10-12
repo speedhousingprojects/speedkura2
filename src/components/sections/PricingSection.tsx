@@ -60,13 +60,10 @@ export default function PricingSection({ onOpenLeadModal }: PricingSectionProps)
                 </h3>
                 <div className="flex items-baseline gap-2 mt-1">
                   <span className="font-display text-2xl sm:text-3xl font-bold text-bronze">
-                    ₹59 Lakhs*
+                    ₹55 Lakhs*
                   </span>
                   <span className="font-sans text-xs text-charcoal-mute">onwards</span>
                 </div>
-                <span className="font-sans text-xs text-charcoal-mute block mt-0.5">
-                  Starting at ₹4,999/sq.ft onwards
-                </span>
               </div>
 
               <ul className="space-y-2 pt-2 border-t border-zinc-border/60 font-sans text-xs sm:text-sm text-obsidian/80">
@@ -135,7 +132,7 @@ export default function PricingSection({ onOpenLeadModal }: PricingSectionProps)
 
               <div>
                 <h3 className="font-display text-xl sm:text-2xl font-bold text-obsidian">
-                  Duplex Homess
+                  Duplex Homes
                 </h3>
                 <div className="flex items-baseline gap-2 mt-1">
                   <span className="font-display text-2xl sm:text-3xl font-bold text-bronze">
@@ -143,9 +140,6 @@ export default function PricingSection({ onOpenLeadModal }: PricingSectionProps)
                   </span>
                   <span className="font-sans text-xs text-charcoal-mute">onwards</span>
                 </div>
-                <span className="font-sans text-xs text-charcoal-mute block mt-0.5">
-                  Starting at ₹4,999/sq.ft onwards
-                </span>
               </div>
 
               <ul className="space-y-2 pt-2 border-t border-zinc-border/60 font-sans text-xs sm:text-sm text-obsidian/80">

@@ -21,7 +21,7 @@ export default function FaqSection({
     {
       question: 'What is the starting price for 2 BHK & Duplex homes at Codename Hi-Five?',
       answer:
-        'Prices at Codename Hi-Five start from ₹59 Lakhs for 2 BHK Smart Luxe apartments (1,100 sq.ft) and up to ₹98 Lakhs for spacious 3 BHK & Duplex suites (2,200 sq.ft). Prices exclude government statutory taxes and floor rise charges.',
+        'Prices at Codename Hi-Five start from ₹55 Lakhs for 2 BHK Smart Luxe apartments (1,100 sq.ft) and up to ₹98 Lakhs for spacious 3 BHK & Duplex suites (2,200 sq.ft). Prices exclude government statutory taxes and floor rise charges.',
     },
     {
       question: 'Is Codename Hi-Five HMDA and TG RERA approved?',

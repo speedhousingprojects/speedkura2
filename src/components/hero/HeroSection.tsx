@@ -18,7 +18,7 @@ const HEADLINES = [
 const SNAPSHOT_FACTS = [
   { icon: Layers, val: "5.3 Acres", lbl: "Gated Township" },
   { icon: Home, val: "2 BHK & Duplex", lbl: "Smart Layouts" },
-  { icon: IndianRupee, val: "₹4,999/sft", lbl: "Starting Price" },
+  { icon: IndianRupee, val: "₹55 Lakhs*", lbl: "Starting Price" },
   { icon: Move, val: "1,100 - 2,200", lbl: "Sq.Ft Carpet Area" },
   { icon: MapPin, val: "1 Min", lbl: "To ORR Exit 5" },
   { icon: Building2, val: "90% Built", lbl: "Possession Soon", isReady: true },
@@ -100,7 +100,7 @@ export default function HeroSection({ onOpenLeadModal }: HeroSectionProps) {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="font-sans text-sm sm:text-base md:text-lg text-alabaster/85 font-normal leading-relaxed max-w-2xl text-left"
           >
-            Luxurious 2 BHK & Duplex gated residences starting from <strong className="text-white font-semibold underline decoration-bronze underline-offset-4">₹59 Lakhs* (₹4,999/sft)</strong> with 70% open spaces adjacent to Bowrampet reserve forests.
+            Luxurious 2 BHK & Duplex gated residences starting from <strong className="text-white font-semibold underline decoration-bronze underline-offset-4">₹55 Lakhs*</strong> with 70% open spaces adjacent to Bowrampet reserve forests.
           </motion.p>
 
           {/* Left-Aligned CTA Button Group */}

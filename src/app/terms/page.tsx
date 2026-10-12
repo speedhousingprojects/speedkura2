@@ -75,7 +75,7 @@ export default function TermsPage() {
                 4. Pricing & Unit Availability
               </h2>
               <p>
-                All prices mentioned (such as 2 BHK starting from ₹59 Lakhs*) are subject to change without prior notice depending on unit orientation, floor rise, premium location charges (PLC), and availability at the time of booking. Official unit allocation is confirmed only upon payment of the booking advance and execution of formal documentation.
+                All prices mentioned (such as 2 BHK starting from ₹55 Lakhs*) are subject to change without prior notice depending on unit orientation, floor rise, premium location charges (PLC), and availability at the time of booking. Official unit allocation is confirmed only upon payment of the booking advance and execution of formal documentation.
               </p>
             </section>
 

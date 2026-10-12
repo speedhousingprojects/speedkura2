@@ -19,8 +19,8 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://kurahomes.in'),
-  title: 'Codename Hi-Five by Kura Homes | 2 BHK & Duplex Homes from ₹59L at ORR Exit-5, Hyderabad',
-  description: 'Explore Codename Hi-Five by Kura Homes - a premium 5.3-acre gated community adjacent to ORR Exit-5, Hyderabad. Offering luxury 2 BHK & Duplex homes starting from ₹59 Lakhs. 90% constructed, possession soon. HMDA & TG RERA Approved (P02200002810).',
+  title: 'Codename Hi-Five by Kura Homes | 2 BHK & Duplex Homes from ₹55L at ORR Exit-5, Hyderabad',
+  description: 'Explore Codename Hi-Five by Kura Homes - a premium 5.3-acre gated community adjacent to ORR Exit-5, Hyderabad. Offering luxury 2 BHK & Duplex homes starting from ₹55 Lakhs. 90% constructed, possession soon. HMDA & TG RERA Approved (P02200002810).',
   keywords: [
     'Codename Hi-Five',
     'Codename Hi Five',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     'apartments near Dundigal',
     'flats near Gandimaisamma',
     'property in Bowrampet Road',
-    '2 BHK starting from 59 lakhs Hyderabad',
+    '2 BHK starting from 55 lakhs Hyderabad',
     'luxury apartments Bowrampet',
     'HMDA approved flats Bowrampet',
     'TG RERA registered project Bowrampet',
@@ -131,7 +131,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Codename Hi-Five by Kura Homes | Premium Gated Homes from ₹59L',
+    title: 'Codename Hi-Five by Kura Homes | Premium Gated Homes from ₹55L',
     description: 'Discover premium 2 BHK & Duplex homes near ORR Exit-5, Hyderabad. 90% built, 40+ lifestyle amenities, 25K sq.ft clubhouse. By Kura Homes - 55 years of trust.',
     url: 'https://kurahomes.in',
     siteName: 'Codename Hi-Five by Kura Homes',
@@ -148,7 +148,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Codename Hi-Five by Kura Homes | Premium Gated Homes from ₹59L',
+    title: 'Codename Hi-Five by Kura Homes | Premium Gated Homes from ₹55L',
     description: 'Discover premium 2 BHK & Duplex homes near ORR Exit-5, Hyderabad. 90% built, 40+ lifestyle amenities, 25K sq.ft clubhouse. TG RERA: P02200002810.',
     images: ['/images/Front view.webp'],
   },
@@ -180,10 +180,10 @@ const listingJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'RealEstateListing',
   'name': 'Codename Hi-Five by Kura Homes',
-  'description': 'Premium 5.3-acre gated community featuring 2 BHK & Duplex homes starting from ₹59 Lakhs at ORR Exit-5, Bowrampet, Hyderabad.',
+  'description': 'Premium 5.3-acre gated community featuring 2 BHK & Duplex homes starting from ₹55 Lakhs at ORR Exit-5, Bowrampet, Hyderabad.',
   'url': 'https://kurahomes.in',
   'telephone': '+918008008946',
-  'priceRange': '₹59 Lakhs - ₹98 Lakhs',
+  'priceRange': '₹55 Lakhs - ₹98 Lakhs',
   'address': {
     '@type': 'PostalAddress',
     'streetAddress': 'Adjacent to ORR Exit No. 5, Bowrampet Road, Dundigal, Gandimaisamma',
@@ -214,7 +214,7 @@ const faqJsonLd = {
       'name': 'What is the starting price for 2 BHK & Duplex homes at Codename Hi-Five?',
       'acceptedAnswer': {
         '@type': 'Answer',
-        'text': 'Prices at Codename Hi-Five by Kura Homes start from ₹59 Lakhs for premium 2 BHK Smart Luxe residences and range up to ₹98 Lakhs for spacious Duplex suites.',
+        'text': 'Prices at Codename Hi-Five by Kura Homes start from ₹55 Lakhs for premium 2 BHK Smart Luxe residences and range up to ₹98 Lakhs for spacious Duplex suites.',
       },
     },
     {
