@@ -8,12 +8,20 @@ import { trackConversion } from '@/lib/gtag';
 export default function ConversionHubSection() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [req, setReq] = useState('');
+  const [homeType, setHomeType] = useState('');
+  const [timeline, setTimeline] = useState('');
+  const [budget, setBudget] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!homeType || !timeline || !budget) {
+      setErrorMsg('Please select your Home Type, Timeline, and Budget preferences.');
+      return;
+    }
+    setErrorMsg('');
     setLoading(true);
 
     try {
@@ -23,7 +31,9 @@ export default function ConversionHubSection() {
         body: JSON.stringify({
           name,
           phone,
-          requirement: req || '',
+          homeType,
+          timeline,
+          budget,
           source: 'footer_main_form',
           timestamp: new Date().toISOString(),
         }),
@@ -138,58 +148,138 @@ export default function ConversionHubSection() {
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-3 font-sans">
-                  <div>
-                    <label className="block text-xs font-semibold text-obsidian mb-1">
-                      Full Name *
+                <form onSubmit={handleSubmit} className="space-y-3.5 font-sans">
+                  {/* Q1: Home Type */}
+                  <div className="space-y-1">
+                    <label className="block text-xs font-semibold text-obsidian">
+                      1. What type of home are you looking for? *
                     </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Rajesh Sharma"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-obsidian placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-bronze focus:ring-1 focus:ring-bronze transition-all"
-                    />
+                    <div className="grid grid-cols-3 gap-2">
+                      {['2 BHK', 'Duplex', 'Not sure yet'].map((type) => {
+                        const isSelected = homeType === type;
+                        return (
+                          <button
+                            key={type}
+                            type="button"
+                            onClick={() => {
+                              setHomeType(type);
+                              setErrorMsg('');
+                            }}
+                            className={`py-2 px-2.5 rounded-xl text-xs font-medium border transition-all text-center ${
+                              isSelected
+                                ? 'bg-bronze text-white border-bronze shadow-sm font-semibold'
+                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-bronze/50 hover:bg-white'
+                            }`}
+                          >
+                            {type}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-obsidian mb-1">
-                      Mobile Number *
+                  {/* Q2: Buying Timeline */}
+                  <div className="space-y-1">
+                    <label className="block text-xs font-semibold text-obsidian">
+                      2. When are you planning to buy? *
                     </label>
-                    <input
-                      type="tel"
-                      required
-                      pattern="[0-9]{10}"
-                      placeholder="10-digit mobile number"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-obsidian placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-bronze focus:ring-1 focus:ring-bronze transition-all"
-                    />
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                      {['Immediately', '1–3 months', '3–6 months', 'Just exploring'].map((time) => {
+                        const isSelected = timeline === time;
+                        return (
+                          <button
+                            key={time}
+                            type="button"
+                            onClick={() => {
+                              setTimeline(time);
+                              setErrorMsg('');
+                            }}
+                            className={`py-2 px-1.5 rounded-xl text-xs font-medium border transition-all text-center ${
+                              isSelected
+                                ? 'bg-bronze text-white border-bronze shadow-sm font-semibold'
+                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-bronze/50 hover:bg-white'
+                            }`}
+                          >
+                            {time}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-obsidian mb-1">
-                      Configuration (Optional)
+                  {/* Q3: Budget Range */}
+                  <div className="space-y-1">
+                    <label className="block text-xs font-semibold text-obsidian">
+                      3. What is your budget? *
                     </label>
-                    <select
-                      value={req}
-                      onChange={(e) => setReq(e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-obsidian focus:bg-white focus:outline-none focus:border-bronze focus:ring-1 focus:ring-bronze transition-all"
-                    >
-                      <option value="">Preferred Layout (Optional)</option>
-                      <option value="2 BHK">Smart 2 BHK Apartment</option>
-                      <option value="Duplex">Duplex Homes</option>
-                      <option value="Both">Interested in Both</option>
-                    </select>
+                    <div className="grid grid-cols-3 gap-2">
+                      {['₹50–60 Lakhs', '₹60–75 Lakhs', '₹75 Lakhs+'].map((b) => {
+                        const isSelected = budget === b;
+                        return (
+                          <button
+                            key={b}
+                            type="button"
+                            onClick={() => {
+                              setBudget(b);
+                              setErrorMsg('');
+                            }}
+                            className={`py-2 px-2 rounded-xl text-xs font-medium border transition-all text-center ${
+                              isSelected
+                                ? 'bg-bronze text-white border-bronze shadow-sm font-semibold'
+                                : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-bronze/50 hover:bg-white'
+                            }`}
+                          >
+                            {b}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
+
+                  {/* Contact Fields */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                    <div>
+                      <label className="block text-xs font-semibold text-obsidian mb-1">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Rajesh Sharma"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-obsidian placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-bronze focus:ring-1 focus:ring-bronze transition-all"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-obsidian mb-1">
+                        Mobile Number *
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        pattern="[0-9]{10}"
+                        placeholder="10-digit mobile number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-obsidian placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-bronze focus:ring-1 focus:ring-bronze transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {errorMsg && (
+                    <p className="text-xs text-amber-600 font-medium text-center">
+                      {errorMsg}
+                    </p>
+                  )}
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 bg-bronze hover:bg-bronze-hover text-white font-sans font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg hover:shadow-bronze-glow transition-all flex items-center justify-center gap-2 disabled:opacity-70 mt-2"
+                    className="w-full py-3.5 bg-bronze hover:bg-bronze-hover text-white font-sans font-bold text-xs uppercase tracking-widest rounded-xl shadow-lg hover:shadow-bronze-glow transition-all flex items-center justify-center gap-2 disabled:opacity-70 mt-1"
                   >
-                    <span>{loading ? 'Submitting Enquiry...' : 'Submit Enquiry'}</span>
+                    <span>{loading ? 'Submitting Enquiry...' : 'Get Brochure & Price Sheet'}</span>
                     <Send className="w-3.5 h-3.5" />
                   </button>
 

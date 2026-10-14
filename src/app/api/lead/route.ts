@@ -9,10 +9,25 @@ const DEFAULT_PRIVYR_URL =
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, requirement, date, source, role, experience, type } = body;
+    const { name, phone, requirement, homeType, timeline, budget, date, source, role, experience, type } = body;
 
     const roleClean = role ? String(role).trim() : '';
+    const homeTypeClean = homeType ? String(homeType).trim() : '';
+    const timelineClean = timeline ? String(timeline).trim() : '';
+    const budgetClean = budget ? String(budget).trim() : '';
     const isCareer = type === 'career' || String(source || '').toLowerCase().includes('career');
+
+    // Build clear qualification intent summary (for backwards compatibility with existing sheet columns & CRM)
+    const intentParts = [
+      homeTypeClean ? `Type: ${homeTypeClean}` : '',
+      timelineClean ? `Timeline: ${timelineClean}` : '',
+      budgetClean ? `Budget: ${budgetClean}` : '',
+    ].filter(Boolean);
+    const intentSummary = intentParts.join(' | ');
+
+    const finalRequirement = requirement
+      ? `${String(requirement).trim()}${intentSummary ? ` (${intentSummary})` : ''}`
+      : intentSummary;
 
     // Always generate clean Indian Standard Time (IST) timestamp: e.g. "26/8/2026, 6:15:55 pm"
     const istTimestamp = new Date().toLocaleString('en-IN', {
@@ -36,7 +51,10 @@ export async function POST(request: Request) {
     const payload = {
       name: name ? String(name).trim() : '',
       phone: phone ? String(phone).trim() : '',
-      requirement: requirement ? String(requirement).trim() : '',
+      homeType: homeTypeClean,
+      timeline: timelineClean,
+      budget: budgetClean,
+      requirement: finalRequirement,
       role: roleClean,
       experience: experience ? String(experience).trim() : '',
       source: source ? String(source).trim() : 'Website Enquiry',
