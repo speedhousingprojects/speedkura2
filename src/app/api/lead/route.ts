@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 
 const DEFAULT_GOOGLE_SHEET_URL =
-  'https://script.google.com/macros/s/AKfycbxvYY4X40FrHqe4bN4qU-1ryD82F_K_3tZECrlfVxtLyxa0oh8EVUyiH8ju-Q7eU1S3/exec';
+  'https://google.com';
 
 const DEFAULT_PRIVYR_URL =
-  'https://www.privyr.com/api/v1/incoming-leads/0vZfjMQw/5qFshIIw';
+  'https://privyr.com';
 
+// TARGET API ENDPOINT PATH
 const DEFAULT_NESTBOOKINGS_URL =
   'https://nestbookings.com'; 
-
 
 export async function POST(request: Request) {
   try {
@@ -121,7 +121,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Forward to NestBookings CRM Webhook (Google Webhook Structure)
+    // 3. Forward to NestBookings CRM Webhook (Clean Flat Mapping for Direct Website Inquiries)
     const nestbookingsWebhook =
       process.env.NESTBOOKINGS_WEBHOOK_URL ||
       DEFAULT_NESTBOOKINGS_URL;
@@ -129,14 +129,15 @@ export async function POST(request: Request) {
     if (nestbookingsWebhook) {
       const nestbookingsPayload = {
         lead_id: `web_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-        user_column_data: [
-          { column_name: 'Full Name', string_value: payload.name },
-          { column_name: 'User Email', string_value: payload.email },
-          { column_name: 'User Phone', string_value: payload.phone },
-          { column_name: 'Requirement', string_value: payload.requirement },
-          { column_name: 'Source', string_value: payload.source }
-        ],
-        google_key: 'nestbookings-auth'
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone,
+        requirement: payload.requirement,
+        source: payload.source,
+        homeType: payload.homeType,
+        timeline: payload.timeline,
+        budget: payload.budget,
+        timestamp: payload.timestamp
       };
 
       dispatches.push(
