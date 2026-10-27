@@ -1,25 +1,23 @@
 import { NextResponse } from 'next/server';
 
 const DEFAULT_GOOGLE_SHEET_URL =
-  'https://google.com';
+  'https://script.google.com/macros/s/AKfycbxvYY4X40FrHqe4bN4qU-1ryD82F_K_3tZECrlfVxtLyxa0oh8EVUyiH8ju-Q7eU1S3/exec';
 
 const DEFAULT_PRIVYR_URL =
-  'https://privyr.com';
+  'https://www.privyr.com/api/v1/incoming-leads/0vZfjMQw/5qFshIIw';
 
-// TARGET API ENDPOINT PATH
-const DEFAULT_NESTBOOKINGS_URL =
-  'https://nestbookings.com'; 
+const NESTBOOKINGS_WEBHOOK_URL =
+  process.env.NESTBOOKINGS_WEBHOOK_URL;
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, email, requirement, homeType, timeline, budget, date, source, role, experience, type } = body;
+    const { name, phone, requirement, homeType, timeline, budget, date, source, role, experience, type } = body;
 
     const roleClean = role ? String(role).trim() : '';
     const homeTypeClean = homeType ? String(homeType).trim() : '';
     const timelineClean = timeline ? String(timeline).trim() : '';
     const budgetClean = budget ? String(budget).trim() : '';
-    const emailClean = email ? String(email).trim() : '';
     const isCareer = type === 'career' || String(source || '').toLowerCase().includes('career');
 
     // Build clear qualification intent summary (for backwards compatibility with existing sheet columns & CRM)
@@ -56,7 +54,6 @@ export async function POST(request: Request) {
     const payload = {
       name: name ? String(name).trim() : '',
       phone: phone ? String(phone).trim() : '',
-      email: emailClean,
       homeType: homeTypeClean,
       timeline: timelineClean,
       budget: budgetClean,
@@ -121,41 +118,57 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Forward to NestBookings CRM Webhook (Clean Flat Mapping for Direct Website Inquiries)
-    const nestbookingsWebhook =
-      process.env.NESTBOOKINGS_WEBHOOK_URL ||
-      DEFAULT_NESTBOOKINGS_URL;
 
-    if (nestbookingsWebhook) {
-      const nestbookingsPayload = {
-        lead_id: `web_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    // 3. Forward to NestBookings CRM
+    if (NESTBOOKINGS_WEBHOOK_URL) {
+      const nestBookingsPayload = {
         name: payload.name,
-        email: payload.email,
         phone: payload.phone,
-        requirement: payload.requirement,
         source: payload.source,
+        requirement: payload.requirement,
         homeType: payload.homeType,
         timeline: payload.timeline,
         budget: payload.budget,
-        timestamp: payload.timestamp
+        role: payload.role,
+        experience: payload.experience,
+        type: payload.type,
+        targetSheet: payload.targetSheet,
+        date: payload.date,
+        timestamp: payload.timestamp,
       };
 
       dispatches.push(
-        fetch(nestbookingsWebhook, {
+        fetch(NESTBOOKINGS_WEBHOOK_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(nestbookingsPayload),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(nestBookingsPayload),
+          signal: AbortSignal.timeout(10000),
         })
           .then(async (res) => {
-            const data = res.headers.get('content-type')?.includes('application/json')
-              ? await res.json()
-              : await res.text();
-            console.log('[NESTBOOKINGS CRM SYNC SUCCESS]:', data);
+            const responseText = await res.text();
+
+            if (!res.ok) {
+              throw new Error(
+                `NestBookings returned HTTP ${res.status}: ${responseText}`
+              );
+            }
+
+            console.log(
+              '[NESTBOOKINGS SYNC SUCCESS]:',
+              res.status,
+              responseText
+            );
           })
-          .catch((err) => console.error('[NESTBOOKINGS CRM SYNC ERROR]:', err))
+          .catch((err) => {
+            console.error('[NESTBOOKINGS SYNC ERROR]:', err);
+          })
       );
     }
 
+    
     // CRITICAL FOR VERCEL SERVERLESS: Wait for webhooks to finish BEFORE returning response!
     await Promise.allSettled(dispatches);
 
