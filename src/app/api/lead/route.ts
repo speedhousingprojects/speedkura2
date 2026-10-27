@@ -196,6 +196,40 @@ export async function POST(request: Request) {
     }
 
     // 3. NestBookings CRM
+
+    
+const webhookUrl = process.env.NESTBOOKINGS_WEBHOOK_URL;
+const apiToken = process.env.NESTBOOKINGS_API_TOKEN;
+
+let urlHasToken = false;
+let webhookPath = 'invalid-url';
+
+try {
+  if (webhookUrl) {
+    const parsedUrl = new URL(webhookUrl);
+    urlHasToken = parsedUrl.searchParams.has('token');
+    webhookPath = parsedUrl.pathname;
+  }
+} catch {
+  console.error('[NESTBOOKINGS DEBUG] Webhook URL is invalid.');
+}
+
+console.log('[NESTBOOKINGS DEBUG]', {
+  urlConfigured: Boolean(webhookUrl),
+  webhookPath,
+  urlHasToken,
+  apiTokenConfigured: Boolean(apiToken),
+  apiTokenHasWhitespace: apiToken
+    ? apiToken !== apiToken.trim()
+    : false,
+});
+
+    console.log('[NESTBOOKINGS AUTH CHECK]', {
+  urlConfigured: Boolean(NESTBOOKINGS_WEBHOOK_URL),
+  apiTokenConfigured: Boolean(process.env.NESTBOOKINGS_API_TOKEN),
+  authorizationScheme: 'Bearer',
+});
+    
     if (NESTBOOKINGS_WEBHOOK_URL) {
       const nestBookingsPayload = {
         name: payload.name,
@@ -215,6 +249,8 @@ export async function POST(request: Request) {
 
       dispatches.push(
         (async () => {
+
+          
           const response = await fetch(
             NESTBOOKINGS_WEBHOOK_URL,
             {
