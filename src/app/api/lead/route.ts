@@ -219,10 +219,11 @@ export async function POST(request: Request) {
             NESTBOOKINGS_WEBHOOK_URL,
             {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-              },
+             headers: {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+  Authorization: `Bearer ${process.env.NESTBOOKINGS_API_TOKEN}`,
+},
               body: JSON.stringify(nestBookingsPayload),
               signal: AbortSignal.timeout(10000),
             }
