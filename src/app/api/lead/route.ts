@@ -9,6 +9,7 @@ const DEFAULT_PRIVYR_URL =
 const NESTBOOKINGS_WEBHOOK_URL =
   process.env.NESTBOOKINGS_WEBHOOK_URL;
 
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
