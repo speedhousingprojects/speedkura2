@@ -7,7 +7,8 @@ const DEFAULT_PRIVYR_URL =
   'https://www.privyr.com/api/v1/incoming-leads/0vZfjMQw/5qFshIIw';
 
 const DEFAULT_NESTBOOKINGS_URL =
-  'https://nestbookings.com';
+  'https://nestbookings.com'; 
+
 
 export async function POST(request: Request) {
   try {
