@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 
 const DEFAULT_GOOGLE_SHEET_URL =
@@ -9,71 +10,111 @@ const DEFAULT_PRIVYR_URL =
 const NESTBOOKINGS_WEBHOOK_URL =
   process.env.NESTBOOKINGS_WEBHOOK_URL;
 
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, phone, requirement, homeType, timeline, budget, date, source, role, experience, type } = body;
 
+    const {
+      name,
+      phone,
+      requirement,
+      homeType,
+      timeline,
+      budget,
+      date,
+      source,
+      role,
+      experience,
+      type,
+    } = body;
+
+    // Clean and normalize input values
+    const nameClean = name ? String(name).trim() : '';
+    const phoneClean = phone ? String(phone).trim() : '';
     const roleClean = role ? String(role).trim() : '';
     const homeTypeClean = homeType ? String(homeType).trim() : '';
     const timelineClean = timeline ? String(timeline).trim() : '';
     const budgetClean = budget ? String(budget).trim() : '';
-    const isCareer = type === 'career' || String(source || '').toLowerCase().includes('career');
+    const experienceClean = experience
+      ? String(experience).trim()
+      : '';
+    const sourceClean = source
+      ? String(source).trim()
+      : 'Website Enquiry';
+    const dateClean = date ? String(date).trim() : '';
 
-    // Build clear qualification intent summary (for backwards compatibility with existing sheet columns & CRM)
+    const isCareer =
+      type === 'career' ||
+      sourceClean.toLowerCase().includes('career');
+
+    // Build qualification summary
     const intentParts = [
       homeTypeClean ? `Type: ${homeTypeClean}` : '',
       timelineClean ? `Timeline: ${timelineClean}` : '',
       budgetClean ? `Budget: ${budgetClean}` : '',
     ].filter(Boolean);
+
     const intentSummary = intentParts.join(' | ');
 
-    const finalRequirement = requirement
-      ? `${String(requirement).trim()}${intentSummary ? ` (${intentSummary})` : ''}`
+    const requirementClean = requirement
+      ? String(requirement).trim()
+      : '';
+
+    const finalRequirement = requirementClean
+      ? `${requirementClean}${
+          intentSummary ? ` (${intentSummary})` : ''
+        }`
       : intentSummary;
 
-    // Always generate clean Indian Standard Time (IST) timestamp: e.g. "26/8/2026, 6:15:55 pm"
+    // Indian Standard Time timestamp
     const istTimestamp = new Date().toLocaleString('en-IN', {
       timeZone: 'Asia/Kolkata',
       hour12: true,
     });
 
-    // 3 Sheets Routing Classification:
-    // Sheet1 -> Project Leads
-    // Sheet2 -> Sales Executive Applications
-    // Sheet3 -> Channel Partner Applications
+    // Sheet1: Project Leads
+    // Sheet2: Sales Executive Applications
+    // Sheet3: Channel Partner Applications
     let targetSheet = 'Sheet1';
+
     if (isCareer) {
-      if (roleClean.toLowerCase().includes('partner') || roleClean.toLowerCase().includes('channel')) {
+      const roleLower = roleClean.toLowerCase();
+
+      if (
+        roleLower.includes('partner') ||
+        roleLower.includes('channel')
+      ) {
         targetSheet = 'Sheet3';
       } else {
         targetSheet = 'Sheet2';
       }
     }
 
+    // Shared lead payload
+    const payload = {
+      name: nameClean,
+      phone: phoneClean,
+      homeType: homeTypeClean,
+      timeline: timelineClean,
+      budget: budgetClean,
+      requirement: finalRequirement,
+      role: roleClean,
+      experience: experienceClean,
+      source: sourceClean,
+      type: isCareer ? 'career' : 'project',
+      targetSheet,
+      date: dateClean,
+      timestamp: istTimestamp,
+    };
 
-const payload = {
-  name: name ? String(name).trim() : '',
-  phone: phone ? String(phone).trim() : '',
-  homeType: homeTypeClean,
-  timeline: timelineClean,
-  budget: budgetClean,
-  requirement: finalRequirement,
-  role: roleClean,
-  experience: experience ? String(experience).trim() : '',
-  source: source ? String(source).trim() : 'Website Enquiry',
-  type: isCareer ? 'career' : 'project',
-  targetSheet,
-  date: date ? String(date).trim() : '',
-  timestamp: istTimestamp,
-};
-    
-    console.log('[LEAD CAPTURED]:', payload);
+    console.log('[LEAD CAPTURED]:', {
+      ...payload,
+      phone: phoneClean ? '[REDACTED]' : '',
+    });
 
-    const dispatches: Promise<any>[] = [];
+    const dispatches: Promise<void>[] = [];
 
-    // 1. Forward to Google Sheets Webhook
+    // 1. Google Sheets
     const googleSheetWebhook =
       process.env.GOOGLE_SHEET_WEBHOOK_URL ||
       process.env.GOOGLE_APPS_SCRIPT_URL ||
@@ -81,19 +122,36 @@ const payload = {
 
     if (googleSheetWebhook) {
       dispatches.push(
-        fetch(googleSheetWebhook, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          redirect: 'follow',
+        (async () => {
+          const response = await fetch(googleSheetWebhook, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            redirect: 'follow',
+            signal: AbortSignal.timeout(15000),
+          });
+
+          const responseText = await response.text();
+
+          if (!response.ok) {
+            throw new Error(
+              `Google Sheets HTTP ${response.status}: ${responseText}`
+            );
+          }
+
+          console.log(
+            '[GOOGLE SHEETS SYNC SUCCESS]:',
+            responseText
+          );
+        })().catch((error: unknown) => {
+          console.error('[GOOGLE SHEETS SYNC ERROR]:', error);
         })
-          .then((res) => res.text())
-          .then((resText) => console.log('[GOOGLE SHEETS SYNC SUCCESS]:', resText))
-          .catch((err) => console.error('[GOOGLE SHEETS SYNC ERROR]:', err))
       );
     }
 
-    // 2. Forward to Privyr CRM Webhook
+    // 2. Privyr CRM
     const privyrWebhook =
       process.env.PRIVYR_WEBHOOK_URL ||
       DEFAULT_PRIVYR_URL;
@@ -109,81 +167,106 @@ const payload = {
       };
 
       dispatches.push(
-        fetch(privyrWebhook, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(privyrPayload),
+        (async () => {
+          const response = await fetch(privyrWebhook, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(privyrPayload),
+            signal: AbortSignal.timeout(15000),
+          });
+
+          const responseText = await response.text();
+
+          if (!response.ok) {
+            throw new Error(
+              `Privyr HTTP ${response.status}: ${responseText}`
+            );
+          }
+
+          console.log(
+            '[PRIVYR CRM SYNC SUCCESS]:',
+            responseText
+          );
+        })().catch((error: unknown) => {
+          console.error('[PRIVYR CRM SYNC ERROR]:', error);
         })
-          .then((res) => res.json())
-          .then((resJson) => console.log('[PRIVYR CRM SYNC SUCCESS]:', resJson))
-          .catch((err) => console.error('[PRIVYR CRM SYNC ERROR]:', err))
       );
     }
 
-
-    // 3. Forward to NestBookings CRM
-  
-    // 3. Forward to NestBookings CRM
+    // 3. NestBookings CRM
     if (NESTBOOKINGS_WEBHOOK_URL) {
       const nestBookingsPayload = {
-        name: name ? String(name).trim() : '',
-        phone: phone ? String(phone).trim() : '',
-        source: source ? String(source).trim() : 'Website Enquiry',
-        requirement: finalRequirement,
-        homeType: homeTypeClean,
-        timeline: timelineClean,
-        budget: budgetClean,
-        role: roleClean,
-        experience: experience ? String(experience).trim() : '',
-        type: isCareer ? 'career' : 'project',
-        targetSheet,
-        date: date ? String(date).trim() : '',
-        timestamp: istTimestamp,
+        name: payload.name,
+        phone: payload.phone,
+        source: payload.source,
+        requirement: payload.requirement,
+        homeType: payload.homeType,
+        timeline: payload.timeline,
+        budget: payload.budget,
+        role: payload.role,
+        experience: payload.experience,
+        type: payload.type,
+        targetSheet: payload.targetSheet,
+        date: payload.date,
+        timestamp: payload.timestamp,
       };
 
       dispatches.push(
-        fetch(NESTBOOKINGS_WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify(nestBookingsPayload),
-          signal: AbortSignal.timeout(10000),
-        })
-          .then(async (res) => {
-            const responseText = await res.text();
-
-            if (!res.ok) {
-              throw new Error(
-                `NestBookings returned HTTP ${res.status}: ${responseText}`
-              );
+        (async () => {
+          const response = await fetch(
+            NESTBOOKINGS_WEBHOOK_URL,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              body: JSON.stringify(nestBookingsPayload),
+              signal: AbortSignal.timeout(10000),
             }
+          );
 
-            console.log(
-              '[NESTBOOKINGS SYNC SUCCESS]:',
-              res.status,
-              responseText
+          const responseText = await response.text();
+
+          if (!response.ok) {
+            throw new Error(
+              `NestBookings HTTP ${response.status}: ${responseText}`
             );
-          })
-          .catch((err) => {
-            console.error('[NESTBOOKINGS SYNC ERROR]:', err);
-          })
+          }
+
+          console.log(
+            '[NESTBOOKINGS SYNC SUCCESS]:',
+            response.status,
+            responseText
+          );
+        })().catch((error: unknown) => {
+          console.error('[NESTBOOKINGS SYNC ERROR]:', error);
+        })
+      );
+    } else {
+      console.warn(
+        '[NESTBOOKINGS] NESTBOOKINGS_WEBHOOK_URL is not configured.'
       );
     }
 
-    
-    // CRITICAL FOR VERCEL SERVERLESS: Wait for webhooks to finish BEFORE returning response!
-    await Promise.allSettled(dispatches);
+    // Wait for all webhook requests before returning
+    await Promise.all(dispatches);
 
     return NextResponse.json({
       success: true,
       message: 'Thank you! Our team will connect with you shortly.',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('[LEAD SUBMISSION ERROR]:', error);
+
     return NextResponse.json(
-      { success: false, error: 'Failed to submit enquiry. Please call us directly at 800 800 8946.' },
+      {
+        success: false,
+        error:
+          'Failed to submit enquiry. Please call us directly at 800 800 8946.',
+      },
       { status: 500 }
     );
   }
