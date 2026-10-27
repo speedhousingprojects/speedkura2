@@ -122,21 +122,23 @@ const payload = {
 
 
     // 3. Forward to NestBookings CRM
+  
+    // 3. Forward to NestBookings CRM
     if (NESTBOOKINGS_WEBHOOK_URL) {
       const nestBookingsPayload = {
-        name: payload.name,
-        phone: payload.phone,
-        source: payload.source,
-        requirement: payload.requirement,
-        homeType: payload.homeType,
-        timeline: payload.timeline,
-        budget: payload.budget,
-        role: payload.role,
-        experience: payload.experience,
-        type: payload.type,
-        targetSheet: payload.targetSheet,
-        date: payload.date,
-        timestamp: payload.timestamp,
+        name: name ? String(name).trim() : '',
+        phone: phone ? String(phone).trim() : '',
+        source: source ? String(source).trim() : 'Website Enquiry',
+        requirement: finalRequirement,
+        homeType: homeTypeClean,
+        timeline: timelineClean,
+        budget: budgetClean,
+        role: roleClean,
+        experience: experience ? String(experience).trim() : '',
+        type: isCareer ? 'career' : 'project',
+        targetSheet,
+        date: date ? String(date).trim() : '',
+        timestamp: istTimestamp,
       };
 
       dispatches.push(
